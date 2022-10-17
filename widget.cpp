@@ -1,11 +1,10 @@
 #include "widget.h"
 #include <QWheelEvent>
 widget::widget(QWidget* parent)
-	: QOpenGLWidget(parent), func(1000, 1), runningPoint(func.getCountOfPeriod()* func.getSizeOfPeriod() * -1)
+	: QOpenGLWidget(parent), func(10, 3), runningPoint(func.getSizeOfPeriod() / -2)
 {
 	statusBar = new QStatusBar(this);
 	statusBar->resize(250, 50);
-	runningPoint = 0;
 	lineOfPeriod = new QLineEdit(this);
 	lineOfPeriod->setPlaceholderText(QString::fromLocal8Bit("Введите количество периодов"));
 
@@ -52,10 +51,10 @@ void widget::paintGL()
 	scalingGraph();
 	ShowStatus();
 
-	//drawOs();
-	//drawFunction();
-	//drawAProjection();
-	//drawACrosshair();
+	drawOs();
+	drawFunction();
+	drawAProjection();
+	drawACrosshair();
 	RunOfPoint();
 
 
@@ -138,7 +137,7 @@ void widget::drawPeriod(int i)
 {
 
 	glTranslated(func.getSizeOfPeriod() * i, 0, 0);
-	glVertexPointer(2, GL_DOUBLE, 0, func.GetArrayOfPoint());
+	glVertexPointer(2, GL_DOUBLE, 0, func.arrayOfPoint);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glColor3d(0, 1, 1);
 	glDrawArrays(GL_LINE_STRIP, 0, func.getCountOfPoint());
@@ -182,19 +181,32 @@ void widget::drawAProjection()
 
 void widget::RunOfPoint()
 {
-	if (doPoint) //&& runningPoint <= func.getCountOfPeriod() * func.getSizeOfPeriod())
+	if (doPoint && runningPoint < func.getCountOfPoint() * 2)
 	{
-	
-		glBegin(GL_POINTS);
-		glColor3f(1., 0.0f, 0.0f);
-		glVertex2f(runningPoint, func.calculateY(runningPoint));
-		glEnd();
 
-		runningPoint += 0.01;
+		glPushMatrix();
+		if (func.getCountOfPeriod() % 2 == 0)
+			glTranslated(func.getSizeOfPeriod() * func.getCountOfPeriod() / 2 * -1, 0, 0);
+		else
+			glTranslated(func.getSizeOfPeriod() * (func.getCountOfPeriod() - 1) / 2 * -1, 0, 0);
+		for (size_t i = 0; i < func.getCountOfPeriod(); i++)
+		{
+			glPushMatrix();
+			glTranslated(func.getSizeOfPeriod() * i, 0, 0);
+			glPointSize(10);
+			glBegin(GL_POINTS);
+			glColor3f(1., 0.0f, 0.0f);
+			glVertex2f(func.arrayOfPoint[runningPoint], func.arrayOfPoint[runningPoint + 1]);
+			glEnd();
+			glPopMatrix();
+		}
+		glPopMatrix();
+		runningPoint += 2;
 	}
 	else
 	{
-		runningPoint = func.getCountOfPeriod() * func.getSizeOfPeriod() * -1;
+		runningPoint = 0;
+		doPoint = false;
 	}
 
 }

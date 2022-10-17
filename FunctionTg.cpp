@@ -61,7 +61,3 @@ double FunctionTg::getSizeOfPeriod()
 	return SizeOfPeriod;
 }
 
-double* FunctionTg::GetArrayOfPoint()
-{
-	return arrayOfPoint;
-}

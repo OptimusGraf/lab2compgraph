@@ -15,7 +15,7 @@ class widget : public QOpenGLWidget
 public:
 	widget(QWidget* parent = nullptr);
 	~widget();
-	bool doPoint = true;
+	bool doPoint = false;
 private:
 	void initializeGL() override;
 	void paintGL() override;
@@ -46,7 +46,7 @@ private:
 
 	bool doProgection = false;
 
-	float runningPoint;
+	int runningPoint;
 	QStatusBar* statusBar;
 	QLineEdit* lineOfPeriod;
 	QLineEdit* lineOfPoint;

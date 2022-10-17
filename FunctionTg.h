@@ -17,14 +17,13 @@ public:
 	int getCountOfPeriod();
 	double getSizeOfPeriod();
 
-	double* GetArrayOfPoint();
-
+	double* arrayOfPoint;
 private:
 	int CountOfPoint;
 	int CountOfPeriod;
 
 	double SizeOfPeriod;
 
-	double* arrayOfPoint;
+	
 };
 
