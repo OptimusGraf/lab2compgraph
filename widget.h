@@ -36,7 +36,8 @@ private:
 	double wheelScroll = 1.;
 
 	QPointF mousePosition;
-	void coordinateTransformation(QPointF& mousePosition);
+	void coordinateTransformation(QPointF& Position);
+	QPointF coordinateTransformationFrom0To1(QPointF Position);
 
 	bool doPoint = false;
 	void RunOfPoint();
