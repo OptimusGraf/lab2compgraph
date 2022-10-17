@@ -1,11 +1,11 @@
 #include "widget.h"
 #include <QWheelEvent>
-widget::widget(QOpenGLWidget* parent)
-	: QOpenGLWidget(parent), func(1000, 50)
+widget::widget(QWidget* parent)
+	: QOpenGLWidget(parent), func(1000, 1), runningPoint(func.getCountOfPeriod()* func.getSizeOfPeriod() * -1)
 {
 	statusBar = new QStatusBar(this);
 	statusBar->resize(250, 50);
-
+	runningPoint = 0;
 	lineOfPeriod = new QLineEdit(this);
 	lineOfPeriod->setPlaceholderText(QString::fromLocal8Bit("Введите количество периодов"));
 
@@ -52,10 +52,11 @@ void widget::paintGL()
 	scalingGraph();
 	ShowStatus();
 
-    drawOs(f);
-	drawFunction();
-	drawAProjection();
-	drawACrosshair();
+	//drawOs();
+	//drawFunction();
+	//drawAProjection();
+	//drawACrosshair();
+	RunOfPoint();
 
 
 }
@@ -92,7 +93,7 @@ void widget::scalingGraph()
 }
 
 
-void widget::drawOs(QOpenGLFunctions* f)
+void widget::drawOs()
 {
 
 	float ver_line[] = { 1,0,0,  0.9,0.05,0,   1,0,0,  0.9, -0.05,0,   -1,0,0,  1,0,0 };
@@ -164,7 +165,7 @@ void widget::drawAProjection()
 	{
 
 		float coordOfX = mousePositionForClick.x();
-		float coordOfY = func.calculateY(coordOfX ) ;
+		float coordOfY = func.calculateY(coordOfX);
 
 		float ver_line[] = { coordOfX,-abs(wheelScroll),0,		coordOfX,abs(wheelScroll),0, //первая линия
 							-abs(wheelScroll),coordOfY,0,		 abs(wheelScroll),coordOfY,0 }; // вторая линия
@@ -181,10 +182,21 @@ void widget::drawAProjection()
 
 void widget::RunOfPoint()
 {
-	if (doPoint)
+	if (doPoint) //&& runningPoint <= func.getCountOfPeriod() * func.getSizeOfPeriod())
 	{
+	
+		glBegin(GL_POINTS);
+		glColor3f(1., 0.0f, 0.0f);
+		glVertex2f(runningPoint, func.calculateY(runningPoint));
+		glEnd();
 
+		runningPoint += 0.01;
 	}
+	else
+	{
+		runningPoint = func.getCountOfPeriod() * func.getSizeOfPeriod() * -1;
+	}
+
 }
 
 
@@ -227,7 +239,7 @@ void widget::coordinateTransformation(QPointF& position)
 		position.setX(position.x() / wheelScroll);
 		position.setY(position.y() / wheelScroll);
 	}
-	else if (wheelScroll <0)
+	else if (wheelScroll < 0)
 	{
 		position.setX(position.x() * -wheelScroll);
 		position.setY(position.y() * -wheelScroll);
@@ -241,7 +253,7 @@ QPointF widget::coordinateTransformationFrom0To1(QPointF Position)
 		Position.setX(Position.x() * wheelScroll);
 		Position.setY(Position.y() * wheelScroll);
 	}
-	else if(wheelScroll < 0)
+	else if (wheelScroll < 0)
 	{
 		Position.setX(Position.x() / -wheelScroll);
 		Position.setY(Position.y() / -wheelScroll);
