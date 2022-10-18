@@ -47,11 +47,18 @@ void widget::paintGL()
 {
 	QOpenGLFunctions* f = QOpenGLContext::currentContext()->functions();
 	f->glClear(GL_COLOR_BUFFER_BIT);
+
+
+
 	glLoadIdentity();
 	scalingGraph();
 	ShowStatus();
 
 	drawOs();
+
+	changeCountOfPeriod((lineOfPeriod->text()).toStdString());
+	changeCountOfPoint((lineOfPoint->text()).toStdString());
+
 	drawFunction();
 	drawAProjection();
 	drawACrosshair();
@@ -59,6 +66,34 @@ void widget::paintGL()
 
 
 }
+
+bool widget::isValue(std::string s)
+{
+	bool k = true;
+	for (auto& x : s) {
+		k = k && std::isdigit(x);
+	}
+	return k;
+}
+void widget::changeCountOfPeriod(std::string s)
+{
+
+	if (s.length() > 0 && isValue(s))
+	{
+		func.setCountOfPeriod(std::stoi(s));
+		int col = func.getCountOfPeriod();
+	}
+}
+
+void widget::changeCountOfPoint(std::string s)
+{
+	if (s.length() > 0 && isValue(s))
+	{
+		func.setCountOfPoint(std::stoi(s));
+	}
+}
+
+
 
 
 void widget::ShowStatus()
@@ -193,14 +228,14 @@ void widget::RunOfPoint()
 		int x = runningPoint % (func.getCountOfPoint() * 2);
 		int numberOfPeriod = runningPoint / (func.getCountOfPoint() * 2);
 
-			glPushMatrix();
-			glTranslated(numberOfPeriod*func.getSizeOfPeriod(), 0, 0);
-			glPointSize(10);
-			glBegin(GL_POINTS);
-			glColor3f(1., 0.0f, 0.0f);
-			glVertex2f(func.arrayOfPoint[x], func.arrayOfPoint[x + 1]);
-			glEnd();
-			glPopMatrix();
+		glPushMatrix();
+		glTranslated(numberOfPeriod * func.getSizeOfPeriod(), 0, 0);
+		glPointSize(10);
+		glBegin(GL_POINTS);
+		glColor3f(1., 0.0f, 0.0f);
+		glVertex2f(func.arrayOfPoint[x], func.arrayOfPoint[x + 1]);
+		glEnd();
+		glPopMatrix();
 
 		glPopMatrix();
 		runningPoint += 2;

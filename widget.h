@@ -44,6 +44,10 @@ private:
 	void coordinateTransformation(QPointF& Position);
 	QPointF coordinateTransformationFrom0To1(QPointF Position);
 
+	void changeCountOfPeriod(std::string s);
+	void changeCountOfPoint(std::string s);
+	bool isValue(std::string s);
+
 	bool doProgection = false;
 
 	int runningPoint;
