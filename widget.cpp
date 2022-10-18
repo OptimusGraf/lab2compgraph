@@ -1,7 +1,7 @@
 #include "widget.h"
 #include <QWheelEvent>
 widget::widget(QWidget* parent)
-	: QOpenGLWidget(parent), func(10, 3), runningPoint(func.getSizeOfPeriod() / -2)
+	: QOpenGLWidget(parent), func(100, 3), runningPoint(func.getSizeOfPeriod() / -2)
 {
 	statusBar = new QStatusBar(this);
 	statusBar->resize(250, 50);
@@ -181,7 +181,7 @@ void widget::drawAProjection()
 
 void widget::RunOfPoint()
 {
-	if (doPoint && runningPoint < func.getCountOfPoint() * 2)
+	if (doPoint && runningPoint < func.getCountOfPoint() * 2 * func.getCountOfPeriod())
 	{
 
 		glPushMatrix();
@@ -189,17 +189,19 @@ void widget::RunOfPoint()
 			glTranslated(func.getSizeOfPeriod() * func.getCountOfPeriod() / 2 * -1, 0, 0);
 		else
 			glTranslated(func.getSizeOfPeriod() * (func.getCountOfPeriod() - 1) / 2 * -1, 0, 0);
-		for (size_t i = 0; i < func.getCountOfPeriod(); i++)
-		{
+
+		int x = runningPoint % (func.getCountOfPoint() * 2);
+		int numberOfPeriod = runningPoint / (func.getCountOfPoint() * 2);
+
 			glPushMatrix();
-			glTranslated(func.getSizeOfPeriod() * i, 0, 0);
+			glTranslated(numberOfPeriod*func.getSizeOfPeriod(), 0, 0);
 			glPointSize(10);
 			glBegin(GL_POINTS);
 			glColor3f(1., 0.0f, 0.0f);
-			glVertex2f(func.arrayOfPoint[runningPoint], func.arrayOfPoint[runningPoint + 1]);
+			glVertex2f(func.arrayOfPoint[x], func.arrayOfPoint[x + 1]);
 			glEnd();
 			glPopMatrix();
-		}
+
 		glPopMatrix();
 		runningPoint += 2;
 	}
