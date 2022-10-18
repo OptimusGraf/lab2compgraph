@@ -27,9 +27,9 @@ private:
 
 	void drawPeriod(int i);
 	void drawFunction();
-	void drawACrosshair();
+	void drawCrosshair();
 	void RunOfPoint();
-	void drawAProjection();
+	void drawProjection();
 
 	void wheelEvent(QWheelEvent* event) override;
 	void mouseMoveEvent(QMouseEvent* event) override;

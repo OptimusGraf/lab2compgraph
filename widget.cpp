@@ -60,8 +60,8 @@ void widget::paintGL()
 	changeCountOfPoint((lineOfPoint->text()).toStdString());
 
 	drawFunction();
-	drawAProjection();
-	drawACrosshair();
+	drawProjection();
+	drawCrosshair();
 	RunOfPoint();
 
 
@@ -179,7 +179,7 @@ void widget::drawPeriod(int i)
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void widget::drawACrosshair()
+void widget::drawCrosshair()
 {
 	float ver_line[] = { mousePosition.x(),-abs(wheelScroll),0,	mousePosition.x(),abs(wheelScroll),0,
 		-abs(wheelScroll),mousePosition.y(),0,	abs(wheelScroll),mousePosition.y(),0 };
@@ -193,7 +193,7 @@ void widget::drawACrosshair()
 
 }
 
-void widget::drawAProjection()
+void widget::drawProjection()
 {
 	if (doProgection)
 	{

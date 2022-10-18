@@ -26,19 +26,21 @@ double FunctionTg::calculateY(double x)
 
 void FunctionTg::calculateArray()
 {
-
+	
 	for (int i = 0; i < CountOfPoint * 2; i += 2)
 	{
-		double x = SizeOfPeriod / CountOfPoint * i / 2 - SizeOfPeriod / 2;
+		double x = SizeOfPeriod / (CountOfPoint-1) * i / 2 - SizeOfPeriod / 2;
 		arrayOfPoint[i] = x;
 		arrayOfPoint[i + 1] = calculateY(x);
+		
 	}
 }
 
 void FunctionTg::setCountOfPoint(int count)
 {
 	CountOfPoint = count;
-	void calculateArray();
+	arrayOfPoint = new double[CountOfPoint * 2];
+	 calculateArray();
 }
 
 void FunctionTg::setCountOfPeriod(int count)
